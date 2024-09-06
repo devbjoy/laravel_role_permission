@@ -4,7 +4,9 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('All Users') }}
             </h2>
-            <a href="{{ route('users.create') }}" class="px-3 py-2 text-sm text-white rounded-md bg-slate-800 hover:bg-slate-700">Add User</a>
+            @can('create users')
+                <a href="{{ route('users.create') }}" class="px-3 py-2 text-sm text-white rounded-md bg-slate-800 hover:bg-slate-700">Add User</a>
+            @endcan
         </div>
         
     </x-slot>
@@ -35,16 +37,30 @@
                         <td class="px-6 py-3 text-left">
                             {{ $user->email }}
                         </td>
-                        <td class="px-6 py-3 text-left">00</td>
+                        <td class="text-left px-6 py-3">
+                            @if ($user->getRoleNames()->isNotEmpty())
+                            @foreach ($user->getRoleNames() as $role)
+                            <button class="px-3 py-2 text-sm tracking-normal text-white rounded-lg bg-pink-300 hover:bg-pink-400 ">{{ $role }}</button>
+                            @endforeach
+                            @endif
+                            
+                        </td>
                         <td class="px-6 py-3 text-left">{{ \Carbon\Carbon::parse($user->created_at)->format('d M, Y')}}</td>
                         <td class="px-6 py-3 text-center justify-center flex gap-1">
-                            <a href="{{ route('user.addToRole',$user->id) }}" class="px-3 py-2 text-sm tracking-normal text-white rounded-lg bg-orange-300 hover:bg-orange-400">Add To Role</a>
-                            <a href="{{ route('users.edit',$user->id) }}" class="px-3 py-2 text-sm tracking-normal text-white rounded-lg bg-green-600 hover:bg-green-700">Edit</a>
+                            @can('add to role users')
+                                <a href="{{ route('user.addToRole',$user->id) }}" class="px-3 py-2 text-sm tracking-normal text-white rounded-lg bg-orange-300 hover:bg-orange-400">Add To Role</a>    
+                            @endcan
+                            @can('edit role')
+                                <a href="{{ route('users.edit',$user->id) }}" class="px-3 py-2 text-sm tracking-normal text-white rounded-lg bg-green-600 hover:bg-green-700">Edit</a> 
+                            @endcan
+                            @can('delete role')
                             <form action="{{ route('users.destroy',$user->id) }}" method="POST">
                                 @csrf
                                 @method('delete')
                                 <button type="submit" class="px-3 py-2 text-sm tracking-normal text-white rounded-lg bg-red-600 hover:bg-red-700">Delete</button>
                             </form>
+                            @endcan
+                            
                         </td>
                     </tr>
                     @endforeach

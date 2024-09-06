@@ -4,7 +4,9 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('All Article') }}
             </h2>
-            <a href="{{ route('articles.create') }}" class="px-3 py-2 text-sm text-white rounded-md bg-slate-800 hover:bg-slate-700">Add Article</a>
+            @can('create article')
+                <a href="{{ route('articles.create') }}" class="px-3 py-2 text-sm text-white rounded-md bg-slate-800 hover:bg-slate-700">Add Article</a>
+            @endcan
         </div>
         
     </x-slot>
@@ -38,12 +40,17 @@
                         <td class="px-6 py-3 text-left">{{ $article->author }}</td>
                         <td class="px-6 py-3 text-left">{{ \Carbon\Carbon::parse($article->created_at)->format('d M, Y')}}</td>
                         <td class="px-6 py-3 text-center justify-center flex gap-1">
-                            <a href="{{ route('articles.edit',$article->id) }}" class="px-3 py-2 text-sm tracking-normal text-white rounded-lg bg-green-600 hover:bg-green-700">Edit</a>
+                            @can('edit article')
+                                <a href="{{ route('articles.edit',$article->id) }}" class="px-3 py-2 text-sm tracking-normal text-white rounded-lg bg-green-600 hover:bg-green-700">Edit</a>
+                            @endcan
+                            @can('delete article')
                             <form action="{{ route('articles.destroy',$article->id) }}" method="POST">
                                 @csrf
                                 @method('delete')
                                 <button type="submit" class="px-3 py-2 text-sm tracking-normal text-white rounded-lg bg-red-600 hover:bg-red-700">Delete</button>
                             </form>
+                            @endcan
+                            
                         </td>
                     </tr>
                     @endforeach

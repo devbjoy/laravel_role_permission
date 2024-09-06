@@ -3,9 +3,9 @@
         
         <div class="flex justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Role/Added') }}
+                {{ __('User To Role Added') }}
             </h2>
-            <a href="{{ route('roles.index') }}" class="px-3 py-2 text-sm text-white rounded-md bg-slate-800 hover:bg-slate-700">Back</a>
+            <a href="{{ route('users.index') }}" class="px-3 py-2 text-sm text-white rounded-md bg-slate-800 hover:bg-slate-700">Back</a>
         </div>
     </x-slot>
 
@@ -27,7 +27,7 @@
                                 @if ($roles->isNotEmpty())
                                 @foreach ($roles as $role)
                                 <div class="mt-3">
-                                    <input class="rounded" type="checkbox" name="role[]" value="{{ $role->name }}" id="role-.{{$role->id}}">
+                                    <input {{ ($hasRoles->contains($role->name)) ? 'checked' : '' }} class="rounded" type="checkbox" name="role[]" value="{{ $role->name }}" id="role-.{{$role->id}}">
                                     <label for="role-.{{ $role->id }}" class="text-sm">{{ $role->name}}</label>
                                 </div>
                                 @endforeach

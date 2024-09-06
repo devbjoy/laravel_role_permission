@@ -4,7 +4,9 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('All Roles') }}
             </h2>
-            <a href="{{ route('roles.create') }}" class="px-3 py-2 text-sm text-white rounded-md bg-slate-800 hover:bg-slate-700">Add Role To Permission</a>
+            @can('create role')
+                <a href="{{ route('roles.create') }}" class="px-3 py-2 text-sm text-white rounded-md bg-slate-800 hover:bg-slate-700">Add Role To Permission</a>
+            @endcan
         </div>
         
     </x-slot>
@@ -18,11 +20,11 @@
             <table class="w-full">
                 <thead class="bg-gray-50">
                     <tr class="border-b">
-                        <th class="px-6 py-3 text-left">#</th>
-                        <th class="px-6 py-3 text-left">Name</th>
+                        <th class="px-6 py-3 text-left" width="50">#</th>
+                        <th class="px-6 py-3 text-left" width="150">Name</th>
                         <th class="px-6 py-3 text-left">Permission Name</th>
-                        <th class="px-6 py-3 text-left">Created</th>
-                        <th class="px-6 py-3 text-center">Action</th>
+                        <th class="px-6 py-3 text-left" width="150">Created</th>
+                        <th class="px-6 py-3 text-center" width="150">Action</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">
@@ -41,12 +43,17 @@
 
                         <td class="px-6 py-3 text-left">{{ \Carbon\Carbon::parse($role->created_at)->format('d M, Y')}}</td>
                         <td class="px-6 py-3 text-center justify-center flex gap-1">
-                            <a href="{{ route('roles.edit',$role->id) }}" class="px-3 py-2 text-sm tracking-normal text-white rounded-lg bg-green-600 hover:bg-green-700">Edit</a>
+                            @can('edit role')
+                                <a href="{{ route('roles.edit',$role->id) }}" class="px-3 py-2 text-sm tracking-normal text-white rounded-lg bg-green-600 hover:bg-green-700">Edit</a>                               
+                            @endcan
+                            @can('delete role')
                             <form action="{{ route('roles.destroy',$role->id) }}" method="POST">
                                 @csrf
                                 @method('delete')
                                 <button type="submit" class="px-3 py-2 text-sm tracking-normal text-white rounded-lg bg-red-600 hover:bg-red-700">Delete</button>
-                            </form>
+                            </form>   
+                            @endcan
+                            
                         </td>
                     </tr>
                     @endforeach
